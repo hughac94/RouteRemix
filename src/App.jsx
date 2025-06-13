@@ -1,8 +1,8 @@
 import React from "react";
 import MapView from "./components/Mapview";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import { MapPin, Navigation, Route } from "lucide-react";
 
 // commment
@@ -22,7 +22,7 @@ function App() {
             </h1>
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover new paths and optimize your journeys with intelligent route planning
+            Discover new paths and optimize your journeys with intelligent route plannings
           </p>
         </div>
 
