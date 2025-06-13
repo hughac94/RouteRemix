@@ -1,0 +1,8 @@
+main.py – FastAPI server, serves /isochrone endpoint.
+isochrone.py – Function to compute isochrone given lat, lon, radius, and time.
+network_graph.py – Builds the OSMnx network graph for walkability.
+elevation.py – Annotates nodes with elevation using Mapbox.
+gap.py – Implements your grade-adjusted pace (GAP) model and adds travel times.
+
+
+uvicorn backend.main:app --reload < run it>

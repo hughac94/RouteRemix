@@ -1,6 +1,8 @@
+
+
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-from isochrone import compute_isochrone
+from backend.utils.isochrone import compute_isochrone
 
 app = FastAPI()
 app.add_middleware(
