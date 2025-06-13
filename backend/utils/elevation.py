@@ -9,6 +9,8 @@ import osmnx as ox
 # 1. Load Mapbox Token
 load_dotenv()
 MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
+if not MAPBOX_TOKEN:
+    raise RuntimeError("MAPBOX_TOKEN not found in .env file")
 
 def latlon_to_tile(lat, lon, zoom):
     n = 2.0 ** zoom
@@ -46,6 +48,8 @@ def add_mapbox_elevations(G, zoom=15):
             img = get_tile(xtile, ytile, zoom)
         except Exception as e:
             print(f"Failed to get tile {xtile},{ytile}: {e}")
+            for node, lat, lon in nodes:
+                G.nodes[node]['elevation'] = None
             continue
         for node, lat, lon in nodes:
             px, py = latlon_to_pixel(lat, lon, zoom, xtile, ytile, tile_size=img.size[0])
