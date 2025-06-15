@@ -1,10 +1,10 @@
+import os
 import osmnx as ox
 import networkx as nx
-import os
 
-def load_cached_county_graph(county_name, graph_dir="D:/osmnx_graphs_england_wales"):
-    """Load a pre-cached county graph."""
-    filename = county_name.replace(", ", "_").replace(" ", "_") + "_run.graphml"
+def load_cached_county_graph(county_name, graph_dir="D:/osmnx_graphs_england_wales", network="RUNNING"):
+    """Load a pre-cached county graph, defaulting to the filtered running network."""
+    filename = county_name.replace(", ", "_").replace(" ", "_") + f"_{network.upper()}.graphml"
     path = os.path.join(graph_dir, filename)
     if not os.path.exists(path):
         raise FileNotFoundError(f"Graph for {county_name} not found: {path}")

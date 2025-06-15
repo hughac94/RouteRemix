@@ -20,12 +20,13 @@ app.add_middleware(
 def get_isochrone(
     lat: float = 51.940973,
     lon: float = -0.230705,
-    radius_km: float = 10,
-    time_sec: int = 3600,
-    countyname: str = Query("Hertfordshire, England, United Kingdom")
+    radius_km: float = 15,
+    time_sec: int = 5400,
+    countyname: str = Query("Hertfordshire, England, United Kingdom"),
+    flat_speed: float = Query(1.4)  # <-- Add this line
 ):
     try:
-        geojson = compute_isochrone(lat, lon, radius_km, time_sec, countyname)
+        geojson = compute_isochrone(lat, lon, radius_km, time_sec, countyname, flat_speed)
         return geojson
     except Exception as e:
         import traceback

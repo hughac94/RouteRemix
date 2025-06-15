@@ -10,17 +10,23 @@ function App() {
   const [isochrone, setIsochrone] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
+  // New states for user-input pace and time
+  const [pace, setPace] = React.useState(7.5); // min/km
+  const [timeMins, setTimeMins] = React.useState(60); // minutes
+
   // Handler to fetch isochrone when button is clicked
   const handleGenerateIsochrone = async () => {
     if (!selectedLocation) return;
     setLoading(true);
     setIsochrone(null);
+    const flatSpeed = 1000 / (pace * 60); // Convert min/km to m/s
     const params = new URLSearchParams({
       lat: selectedLocation.lat,
       lon: selectedLocation.lng,
-      radius_km: 2, // You could make this user input later
-      time_sec: 3600, // You could make this user input later
-      countyname: "Greater London, England, United Kingdom", // You could make this dynamic later
+      radius_km: 30, // You could make this user input later
+      time_sec: timeMins * 60, // User input
+      countyname: "Hertfordshire, England, United Kingdom", // You could make this dynamic later
+      flat_speed: flatSpeed
     });
     try {
       const response = await fetch(`http://localhost:8000/isochrone?${params}`);
@@ -100,6 +106,32 @@ function App() {
                         <div className="text-sm font-medium text-muted-foreground">Longitude</div>
                         <div className="text-lg font-mono">{selectedLocation.lng.toFixed(6)}</div>
                       </div>
+                    </div>
+                    {/* New user input controls */}
+                    <div className="flex flex-col gap-2 my-2">
+                      <label className="flex flex-col">
+                        <span className="text-sm font-medium">Pace (min/km):</span>
+                        <input
+                          type="number"
+                          step="0.1"
+                          min="2"
+                          max="20"
+                          value={pace}
+                          onChange={e => setPace(Number(e.target.value))}
+                          className="border px-2 py-1 rounded mt-1"
+                        />
+                      </label>
+                      <label className="flex flex-col">
+                        <span className="text-sm font-medium">Time (minutes):</span>
+                        <input
+                          type="number"
+                          min="1"
+                          max="600"
+                          value={timeMins}
+                          onChange={e => setTimeMins(Number(e.target.value))}
+                          className="border px-2 py-1 rounded mt-1"
+                        />
+                      </label>
                     </div>
                     <Button
                       className="w-full"
