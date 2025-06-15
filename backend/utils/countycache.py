@@ -1,7 +1,6 @@
-import osmnx as ox
 import os
+import osmnx as ox
 
-# List of counties in England and Wales (example subset for demo)
 counties = [
     "Greater London, England, United Kingdom",
     "Hertfordshire, England, United Kingdom",
@@ -11,12 +10,19 @@ counties = [
 output_dir = "D:/osmnx_graphs_england_wales"
 os.makedirs(output_dir, exist_ok=True)
 
+# Custom filter for UK running (includes bridleways, permissive, byways, road, all surfaces)
+custom_filter = (
+    '["highway"~"footway|path|pedestrian|residential|living_street|track|unclassified|service|tertiary|secondary|primary|bridleway|cycleway|steps|byway|restricted_byway|road"]'
+    '["area"!~"yes"]'
+    '["access"!~"private|no"]'
+)
+
 for county in counties:
-    filename = county.replace(", ", "_").replace(" ", "_") + "_walk.graphml"
+    filename = county.replace(", ", "_").replace(" ", "_") + "_run.graphml"
     filepath = os.path.join(output_dir, filename)
     if not os.path.exists(filepath):
         print(f"Downloading {county}...")
-        G = ox.graph_from_place(county, network_type="walk", simplify=True)
+        G = ox.graph_from_place(county, custom_filter=custom_filter, simplify=True)
         ox.save_graphml(G, filepath)
         print(f"Saved {filepath}")
     else:

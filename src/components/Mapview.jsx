@@ -1,5 +1,5 @@
 import React from "react";
-import { MapContainer, TileLayer, Marker, Polyline, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, useMapEvents, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
@@ -19,9 +19,7 @@ function LocationMarker({ onSelect }) {
   return position === null ? null : <Marker position={position}></Marker>;
 }
 
-export default function MapView({ onSelectLocation, route, startLocation }) {
-  
-
+export default function MapView({ onSelectLocation, route, startLocation, isochrone }) {
   return (
     <MapContainer center={startLocation || [51.505, -0.09]} zoom={13} style={{ height: "70vh", width: "100%" }}>
       <TileLayer
@@ -32,6 +30,8 @@ export default function MapView({ onSelectLocation, route, startLocation }) {
       />
       <LocationMarker onSelect={onSelectLocation} />
       {route && <Polyline positions={route} color="blue" />}
+      {/* Add this to display the isochrone */}
+      {isochrone && <GeoJSON data={isochrone} style={{ color: "#0074D9", fillOpacity: 0.2 }} />}
     </MapContainer>
   );
 }

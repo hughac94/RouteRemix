@@ -7,6 +7,32 @@ import { MapPin, Navigation, Route, ExternalLink } from "lucide-react";
 
 function App() {
   const [selectedLocation, setSelectedLocation] = React.useState(null);
+  const [isochrone, setIsochrone] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  // Handler to fetch isochrone when button is clicked
+  const handleGenerateIsochrone = async () => {
+    if (!selectedLocation) return;
+    setLoading(true);
+    setIsochrone(null);
+    const params = new URLSearchParams({
+      lat: selectedLocation.lat,
+      lon: selectedLocation.lng,
+      radius_km: 2, // You could make this user input later
+      time_sec: 3600, // You could make this user input later
+      countyname: "Greater London, England, United Kingdom", // You could make this dynamic later
+    });
+    try {
+      const response = await fetch(`http://localhost:8000/isochrone?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch isochrone");
+      const geojson = await response.json();
+      setIsochrone(geojson);
+    } catch (e) {
+      alert("Failed to fetch isochrone");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
@@ -38,7 +64,11 @@ function App() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
-              <MapView onSelectLocation={setSelectedLocation} />
+              <MapView
+                onSelectLocation={setSelectedLocation}
+                isochrone={isochrone}
+                selectedLocation={selectedLocation}
+              />
             </CardContent>
           </Card>
 
@@ -71,9 +101,14 @@ function App() {
                         <div className="text-lg font-mono">{selectedLocation.lng.toFixed(6)}</div>
                       </div>
                     </div>
-                    <Button className="w-full" size="lg">
+                    <Button
+                      className="w-full"
+                      size="lg"
+                      onClick={handleGenerateIsochrone}
+                      disabled={loading}
+                    >
                       <Route className="h-4 w-4 mr-2" />
-                      Generate Route
+                      {loading ? "Generating..." : "Generate Route"}
                     </Button>
                   </div>
                 ) : (

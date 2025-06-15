@@ -6,3 +6,20 @@ gap.py – Implements your grade-adjusted pace (GAP) model and adds travel times
 
 
 uvicorn backend.main:app --reload < run it>
+
+http://localhost:8000/docs to interact
+
+curl -X 'GET' "http://localhost:8000/isochrone?lat=51.5074&lon=-0.127&radius_km=2&time_sec=3600&countyname=Greater%20London%2C%20England%2C%20United%20Kingdom" -H "accept: application/json"
+
+Flat speed is inputted at 1.4
+
+London - lat=51.5074&lon=-0.127 < London>
+51.940973. Longitude : -0.230705 W Wymondley
+
+https://geojson.io/#map=11.71/51.9312/-0.238
+
+You need to have both servers running:
+React frontend: npm run dev (Vite)
+FastAPI backend: uvicorn backend.main:app --reload (or your backend’s launch command)
+
+https://www.openstreetmap.org/way/141257865#map=17/51.937937/-0.210789&layers=D
